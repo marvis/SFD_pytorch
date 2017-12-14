@@ -83,7 +83,8 @@ event_list = wider_face_mat['event_list']
 file_list = wider_face_mat['file_list']
 
 save_path = './eval/sfd_val_pytorch/'
-dataset = '../../dataset/face/WIDER/WIDER_val.zip'
+#dataset = '../../dataset/face/WIDER/WIDER_val.zip'
+dataset = '../caffe/wider_face_images/WIDER_val.zip'
 datazip = zipfile.ZipFile(dataset)
 
 net = s3fd()
@@ -95,9 +96,15 @@ net.eval()
 #     size = 1024+64*i; print(size)
 #     detect(net,np.zeros((size,size,3)))
 
-for index, event in enumerate(event_list):
+id = int(sys.argv[1])
+print('split %d' % id)
+ranges = [range(0,15), range(15,30), range(30,45), range(45,61)]
+for index in ranges[id]:
+#for index, event in enumerate(event_list):
+    event = event_list[index]
     filelist = file_list[index][0]
     im_dir = event[0][0].encode('utf-8')
+    print(save_path, im_dir)
     if not os.path.exists(save_path + im_dir): os.makedirs(save_path + im_dir)
 
     for num, file in enumerate(filelist):
